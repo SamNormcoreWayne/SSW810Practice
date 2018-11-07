@@ -47,20 +47,20 @@ class Instructor():
 class Major():
     __slots__ = {"major", "required", "elective"}
 
-    def __init__(self, major, required, elective):
+    def __init__(self, major):
         self.major = major
         self.required = set()
         self.elective = set()
 
     def add_required(self, course):
-        self.required.add(course)
+        self.required = self.required.union(set(course))
 
     def add_elective(self, course):
-        self.elective.add(course)
+        self.elective = self.elective.union(set(course))
 
 
 class Repository():
-    __slots__ = {"stu_data", "ins_data", "working_path", "course_data"}
+    __slots__ = {"stu_data", "ins_data", "working_path", "course_data", "major_data"}
 
     def __init__(self, dir_path=os.getcwd()):
         self.working_path = dir_path
@@ -104,33 +104,49 @@ class Repository():
     def read_major(self):
         mj_dir = os.path.join(self.working_path, "majors.txt")
         reader_gen = csv_reader(mj_dir, 3, '\t', False)
-        tmp_dic = defaultdict(dict)
+        tmp_dic = defaultdict(lambda: defaultdict(set))
         for dept, flag, course in reader_gen:
-            tmp_dic += {flag: course}
+            tmp_dic[dept][flag].add(course)
 
         for dept, courses in tmp_dic.items():
-            new_major = Major(dept)
-            for flag, course in courses:
+            new_major = Major(major=dept)
+            for flag, course in courses.items():
                 if flag == 'R':
                     new_major.add_required(course)
                 if flag == 'E':
                     new_major.add_elective(course)
             self.major_data[dept] = new_major
 
+    def major_table(self):
+        field_name = ['Dept', 'Required', 'Elective']
+        table = PrettyTable(field_names=field_name)
+        for dept, major in self.major_data.items():
+            table.add_row([dept, major.required, major.elective])
+        print(table)
+
+        lst = list()
+        for dept, major in self.major_data.items():
+            lst.append([dept, major.required, major.elective])
+        return lst
 
     def stu_table(self):
-        field_name = ['CWID', 'Name', 'Courses']
+        field_name = ['CWID', 'Name', 'Completed Courses', 'Required', 'Elective']
         table = PrettyTable(field_names=field_name)
-
         for cwid, stu in self.stu_data.items():
-            table.add_row([cwid, stu.name, list(stu.get_course_grade().keys())])
+            remain_require = self.major_data[stu.major].required.difference(stu.get_course_grade().keys())
+            remain_elective = self.major_data[stu.major].elective.intersection(stu.get_course_grade().keys())
+            if len(remain_elective) == 0:
+                remain_elective = self.major_data[stu.major].elective
+            else:
+                remain_elective = None
+            table.add_row([cwid, stu.name, list(stu.get_course_grade().keys()), remain_require, remain_elective])
             # Focus on the container of student courses.
             # The keys are course names and values are grades.
         print(table.get_string(sortby='CWID'))
 
         lst = list()
         for cwid, stu in self.stu_data.items():
-            lst.append((cwid, stu.name, list(stu.get_course_grade().keys())))
+            lst.append((cwid, stu.name, list(stu.get_course_grade().keys()), remain_require, remain_elective))
 
         return lst
 
@@ -156,41 +172,55 @@ class TestRepository(unittest.TestCase):
     """
     Test of class Repository
     """
-
+    def test_major_table(self):
+        test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
+        test.read_stu()
+        test.read_ins()
+        test.read_grade()
+        test.read_major()
+        self.assertEquals(test.major_table(), [['SFEN', {'SSW 567', 'SSW 564', 'SSW 540', 'SSW 555'}, {'CS 501', 'CS 545', 'CS 513'}]])
     def test_stu_table(self):
         # I am finding a way to invoke read_stu(), read_ins() and read_grades() automatically \
         # when invoke stu_table() or ins_table as long as no data in containers.
-        test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW09\TestCase')
+        test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
         test.read_stu()
         test.read_ins()
         test.read_grade()
-        self.assertEquals(test.stu_table(), [('10442561', 'Ziyu, Z', ['SSW 810'])])
+        test.read_major()
+        self.assertEquals(test.stu_table(), [('10442561', 'Ziyu, Z', ['SSW 810'], {'SSW 540', 'SSW 564', 'SSW 555', 'SSW 567'}, {'CS 545', 'CS 501', 'CS 513'})])
 
     def test_ins_table(self):
-        test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW09\TestCase')
+        test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
         test.read_stu()
         test.read_ins()
         test.read_grade()
-        test.ins_table()
+        test.read_major()
         self.assertEquals(test.ins_table(), [('00000', 'Rowland, J', 'SFEN', 'SSW 810', 1)])
 
 
 def main():
-    stevens = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW09')
+    stevens = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10')
     stevens.read_stu()
     stevens.read_ins()
     stevens.read_grade()
+    stevens.read_major()
+    stevens.major_table()
     stevens.stu_table()
     stevens.ins_table()
 
-    test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW09\TestCase')
+
+    test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
+
     test.read_stu()
     test.read_ins()
     test.read_grade()
+    test.read_major()
     test.ins_table()
-    test.stu_table()
+    print(test.stu_table())
+    print(test.major_table())
+
 
 
 if __name__ == '__main__':
-    # unittest.main(exit=False, verbosity=2)
+    unittest.main(exit=False, verbosity=2)
     main()
