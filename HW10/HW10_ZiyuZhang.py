@@ -172,6 +172,7 @@ class TestRepository(unittest.TestCase):
     """
     Test of class Repository
     """
+
     def test_major_table(self):
         test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
         test.read_stu()
@@ -179,6 +180,7 @@ class TestRepository(unittest.TestCase):
         test.read_grade()
         test.read_major()
         self.assertEquals(test.major_table(), [['SFEN', {'SSW 567', 'SSW 564', 'SSW 540', 'SSW 555'}, {'CS 501', 'CS 545', 'CS 513'}]])
+
     def test_stu_table(self):
         # I am finding a way to invoke read_stu(), read_ins() and read_grades() automatically \
         # when invoke stu_table() or ins_table as long as no data in containers.
@@ -208,7 +210,6 @@ def main():
     stevens.stu_table()
     stevens.ins_table()
 
-
     test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
 
     test.read_stu()
@@ -218,7 +219,6 @@ def main():
     test.ins_table()
     print(test.stu_table())
     print(test.major_table())
-
 
 
 if __name__ == '__main__':

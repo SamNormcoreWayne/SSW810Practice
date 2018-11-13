@@ -2,6 +2,7 @@
 # HW09 SSW 810
 import os
 import unittest
+import pymysql
 from prettytable import PrettyTable
 from reader import csv_reader
 
@@ -103,12 +104,18 @@ class Repository():
     def ins_table(self):
         field_name = ['CWID', 'Name', 'Dept', 'Course', 'Students']
         table = PrettyTable(field_names=field_name)
-
+        db = pymysql.connect("localhost", "root", "123456", "sswrepository_zzy")
+        cursor = db.cursor()
         for cwid, ins in self.ins_data.items():
             for course, students in ins.get_course_stu_num().items():
                 # Focus on the cotainer of instructors courses.
                 # The keys are courses and the values are student numbers.
                 table.add_row([cwid, ins.name, ins.dept, course, students])
+                try:
+                    cursor.execute("INSERT INTO instructors_re (CWID, Name, Dept, course, stuNum) VALUES ('{}', '{}', '{}', '{}', '{}')".format(cwid, ins.name, ins.dept, course, students))
+                    db.commit()
+                except pymysql.err.Error:
+                    print('Error')
         print(table.get_string(sortby='CWID'))
 
         lst = list()
@@ -158,5 +165,5 @@ def main():
 
 
 if __name__ == '__main__':
-    unittest.main(exit=False, verbosity=2)
-    # main()
+    # unittest.main(exit=False, verbosity=2)
+    main()

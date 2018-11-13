@@ -5,9 +5,11 @@
 from random import choice
 # I guess this is how inheritance works in python because I know random is a class
 
+
 def get_answer():
     answer = choice(['R', 'P', 'S'])
     return answer
+
 
 def main():
     outcoming = {'R': {'R': 'Tie: both Rock', 'S': 'Win: R defeats S', 'P': 'Lose: P defeats R'},
@@ -25,6 +27,7 @@ def main():
             break
         else:
             print(outcoming[human][computer], '\n')
+
 
 if __name__ == '__main__':
     main()
