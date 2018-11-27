@@ -3,13 +3,12 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
-#include <random>
+#include <ctime>
+#include <cstdlib>
 
 using std::cout;
 using std::endl;
 using std::cin;
-using std::default_random_engine;
-using std::uniform_int_distribution;
 using std::vector;
 using std::unordered_map;
 using std::string;
@@ -17,10 +16,11 @@ using std::string;
 char get_answer()
 {
     vector<char> answer = {'R', 'P', 'S'};
-    std::random_device sed;
-    std::mt19937 rand(sed());
-    uniform_int_distribution<unsigned> domain(0, 2);
-    return answer[domain(rand)];
+    
+    srand((int)time(0));
+    int rd = rand() % 3;
+
+    return answer[rd];
 }
 
 int main()

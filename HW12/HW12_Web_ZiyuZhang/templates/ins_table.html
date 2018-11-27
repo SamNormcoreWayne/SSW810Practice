@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h2>{{ my_header }}</h2>
+<h3>{{ table_title }}</h3>
+<table border="1">
+    {% for item in ins %}
+    <tr>
+        <td>
+        {{ item.cwid }}
+        </td>
+        <td>
+        {{ item.name }}
+        </td>
+        <td>
+        {{ item.dept }}
+        </td>
+        <td>
+        {{ item.course }}
+        </td>
+        <td>
+        {{ item.stuNum }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
