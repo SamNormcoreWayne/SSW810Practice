@@ -7,12 +7,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def base():
-    return "Ziyu Zhang HW12."
+    return "Ziyu Zhang HW12. \n" + "Enter */ins_table to acess table."
 
 
 @app.route('/ins_table')
 def ins_summary():
-    db = pymysql.connect("localhost", "root", "123456", "sswrepository_zzy")
+    pwd = input("Enter root password.")
+    db = pymysql.connect("localhost", "root", str(pwd), "sswrepository_zzy")
     cursor = db.cursor()
     query = """select CWID, Name, Dept, course, stuNum from instructors_re;"""
     cursor.execute(query)
