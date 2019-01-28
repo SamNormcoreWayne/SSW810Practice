@@ -10,7 +10,11 @@
 				"C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/7.1.0/include/c++",
 				"C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/7.1.0/include/c++/x86_64-w64-mingw32",
 				"C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/7.1.0/include/c++/backward",
-				"C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/7.1.0/include/c++/tr1"
+				"C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/7.1.0/include/c++/tr1",
+                "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/include",
+				"C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/include/gdb",
+				"C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include",
+                "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"
             ],
             "defines": [
                 "_DEBUG",

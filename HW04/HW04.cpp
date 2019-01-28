@@ -12,8 +12,8 @@ using std::string;
 string toLower(string str)
 {
     string tmp = str;
-    for(auto i = 0; i < tmp.size() && isupper(tmp[i]); ++i)
-        tmp[i] = tolower(tmp[i]);
+    for(auto i = tmp.begin(); i != tmp.end() && isupper(*i); ++i)     
+        *i = tolower(*i);
     return tmp;
 }
 
@@ -22,7 +22,6 @@ int count_vowels(string str)
     int count = 0;
     string tmp = str;
     tmp = toLower(tmp);
-    cout << tmp << endl;
     for (auto i : tmp)
     {
         switch (i)
@@ -40,13 +39,14 @@ int count_vowels(string str)
     return count;
 }
 
-string Search(string target, string str)
+string Search(char target, string str)
 {
     string tmp = toLower(str);
+    target = (char)tolower(target);
     for (int i = tmp.size(); i > 0; --i)
     {
-        if target == tmp[i]
-            return i;
+        if (target == tmp[i])
+            return std::to_string(i + 1);
     }
     return string("end");
 }
@@ -56,4 +56,5 @@ int main()
     string str = "HEllo, world";
 
     cout << count_vowels(str) << endl;
+    cout << Search('o', str) << endl;
 }

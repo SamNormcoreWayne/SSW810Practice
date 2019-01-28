@@ -13,7 +13,7 @@ def csv_reader(path, fields, sep=',', header=False):
     for line in list(get_line(path)):
         line = line.rstrip('\n')
         if header is True:
-            if len(header) != fields:
+            if len(line) != fields:
                 raise ValueError('Expected {} fields, but the header only has {}.'.format(fields, len(header)))
             header = False
             continue

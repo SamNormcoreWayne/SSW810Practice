@@ -209,7 +209,7 @@ def main():
     stevens.major_table()
     stevens.stu_table()
     stevens.ins_table()
-
+    print(stevens.stu_data)
     test = Repository(dir_path=r'C:\Users\64937\OneDrive\Documents\SSW\810\HW10\TestCase')
 
     test.read_stu()
@@ -222,5 +222,5 @@ def main():
 
 
 if __name__ == '__main__':
-    unittest.main(exit=False, verbosity=2)
+    #unittest.main(exit=False, verbosity=2)
     main()
